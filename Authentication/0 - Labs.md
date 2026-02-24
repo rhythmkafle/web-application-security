@@ -32,3 +32,45 @@ Now do the same for password.
 Login and solve the lab.
 
 ## Lab 5: Username enumeration via response timing
+First, open Burp Suite, then try logging in with random username and password. Send the request to  `Intruder` tab. Add the username as the attacking parameter, then load the `usernames.txt` file. After that, Start attack.
+![[Pasted image 20260222105232.png]]
+We can see that too many attempts leads to ban. This means that we need to somehow bypass the rate limit protection. 
+![[Pasted image 20260222105544.png]]
+However, if we add the header `X-Forwarded-For` and set the value, then the rate limiting is bypassed. Also, we can see that the application takes longer time to verify the correct username against incorrect ones. 
+So, we do the following steps for finding out the username:
+- Change X-Forwarded-For value every time to bypass rate limiting
+- Put a very long password so that we can find out what the correct username is by filtering through response time.
+- Put the intruder in Pitchfork mode
+
+When we do this, we find the correct username to be: `as`. Now, time to find the password.
+
+Setup the intruder tab just like how we did for usernames. Then start attack.
+
+The password with `302` response code is the password.
+Login and solve the lab.
+
+## Lab 6: Broken Brute-force protection, IP block
+We notice that we get blocked every time we login 3 times incorrectly. But, if we login correctly, it seems that the ban is lifted.
+First, make a `user.txt` file which will contain usernames such that every 3rd name is wiener:
+```
+carlos
+carlos
+wiener
+...
+```
+
+Then create a password list where every 3rd password is peter:
+```
+12345
+password
+peter
+...
+```
+This way, we can make sure that we solve the lab without being bruteforced.
+Run burp intruder in `pitchfork` mode.
+
+After doing this, we will get the password to the `carlos` user.
+Login to solve the lab.
+
+## Lab : Username enumeration via account lock
+

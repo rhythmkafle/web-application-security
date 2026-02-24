@@ -20,3 +20,15 @@ Sometimes, usernames can also be reflected in HTTP response.  Usernames may also
 ### Bruteforcing Passwords
 If we can know the pattern in which password is set in, we can create a wordlist of similar pattern and then attempt a bruteforce.
 
+## Flawed Bruteforce Protection
+Brute-force attack will compromise an account if it gets chance to try many many passwords. Rate limiting can be implemented using mainly 2 methods:
+- Locking the account that the remote user is trying to access if they make too many incorrect attempts
+- Blocking the remote user's IP address if they make too many incorrect attempts
+
+However, there might be some flaws in the protection. 
+In some cases, our IP gets blocked for too many incorrect attempts, but the ban gets resets once we login to our own account. So, we can just login to our accounts every few times. 
+
+
+## Account locking
+If we meet the suspicious criteria, usually after a number of failed attempts, our account may be locked. 
+We might be able to enumerate usernames even by the response code which says account locked.
