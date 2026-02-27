@@ -42,3 +42,39 @@ On the other hand, as the Host header is such a fundamental part of how the webs
 
 ## Check for flawed validation
 Instead of receiving `"Invalid Host header"` response, you might find that your request is blocked as a result of some kind of security measure. For example, some websites will validate whether the Host header matches the SNI from the TLS handshake. This doesn't necessarily mean that they're immune to Host header attacks.
+Sometimes, the way the website parses the Host Header can reveal loopholes that can be used to bypass the validation. For eg: some parsing algorithms will omit the port from the host header, which means that only domain name is validated. If, somehow, we can supply a non-numeric port, we can leave the domain name untouched to ensure that we reach the website, we can potentially inject  payload via the port.
+
+```
+GET /example HTTP/1.1
+Host: website.com:payload
+```
+Alternatively, we could take advantage of a less-secure subdomain that we have already compromised.
+```
+GET /example HTTP/1.1
+Host: hacked-subdomain.vulnerable-website.com
+```
+Some sites will try to apply matching logic for arbitrary subdomains. In such cases, we may be able to bypass the validation entirely by registering and arbitrary domain name that ends with the same sequence of characters as the whitelisted ones:
+```
+GET /example HTTP/1.1
+Host:nonvulnerable-website.com
+```
+
+## Send ambiguous requests
+The code that validates the host and the code that does something vulnerable often resides in different application components or even on separate servers. By identifying and exploiting discrepancies in how they retrieve the Host Header, we may be able to issue an ambiguous request that appears to have a different host depending on which system is looking at it.
+
+Few examples:
+#### Inject duplicate host headers
+Try adding a duplicate Host headers. This will often just result in your request getting blocked. However, as a browser almost never sends such request, the developers might never have anticipated such scenarios.
+```
+GET /example HTTP/1.1 Host: vulnerable-website.com 
+Host: bad-stuff-here
+```
+Let's say that the front-end gives precedence to the first instance of the header, but the back-end prefers the final instance. In this scenario, the first header could ensure the request is being routed to the intended destination and the second header can be used to pass payload to the server side code.
+
+### Supply an absolute URL
+The ambiguity caused by supplying both an absolute URL and a Host header can also lead to discrepancies between different systems. Officially, the request line should be given precedence when routing the request but, in practice, this isn't always the case. You can potentially exploit these discrepancies in much the same way as duplicate Host headers.
+```
+GET https://vulnerable-website.com/ HTTP/1.1
+Host: bad-stuff-here
+```
+Note that we may need to experiment with different protocols. Servers will sometimes behave differently depending on whether the request line contains an HTTP or an HTTPS URL.
