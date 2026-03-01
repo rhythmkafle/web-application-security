@@ -78,3 +78,50 @@ GET https://vulnerable-website.com/ HTTP/1.1
 Host: bad-stuff-here
 ```
 Note that we may need to experiment with different protocols. Servers will sometimes behave differently depending on whether the request line contains an HTTP or an HTTPS URL.
+
+### Add line wrapping
+Some servers interprets the indented header as a wrapped line, and therefore treat is as part of the preceding header's value. Other servers will ignore the indented header altogether.
+```
+GET /example HTTP/1.1
+    Host: bad-stuff-here
+Host: vulnerable-website.com
+```
+The website may block requests with multiple Host headers, but you may be able to bypass this validation by indenting one of them as above.
+If the front-end ignores the indented header, the request will process normally. And if back-end ignores the leading space and gives precedence to the first header, we might be able to pass arbitrary values.
+
+
+## Inject host override headers
+
+We might be able to inject payloads via one of several other HTTP headers that are desgined to serve just this purpose.
+Websites are often accessed via some kind of intermediary system, such as a load balancer or a reverse proxy. In this kind of architecture, the Host Header that the back-end server receives may contain the domain name of one of these intermediary systems, This is usually not relevant for the requested functionality.
+To solve this problem, front-end may inject `X-Forwarded-Host` header, containing original value of the Host header from client's initial request.
+You can sometimes use `X-Forwarded-Host` to inject your malicious input while circumventing any validation on the Host header itself.
+
+```
+GET /example HTTP/1.1
+Host: vulnerable-website.com
+X-Forwarded-Host: bad-stuff-here
+```
+
+Although `X-Forwarded-Host` is the de facto standard for this behavior, you may come across other headers that serve a similar purpose, including:
+
+- `X-Host`
+- `X-Forwarded-Server`
+- `X-HTTP-Host-Override`
+- `Forwarded`
+
+---
+# How to exploit the HTTP Host Header
+## Password reset poisoning
+Password reset poisoning is a technique whereby an attacker manipulates a vulnerable website into generating a password reset link pointing to a domain under their control.
+
+Virtually all websites requires login and implements a reset password functionality. There are several ways of doing this, and the most common approach goes like this:
+
+1. The user enters their username or email address and submits a password reset request.
+2. The website checks that this user exists and then generates a temporary, unique, high-entropy token, which it associates with the user's account on the back-end.
+3. The website sends an email to the user that contains a link for resetting their password. The user's unique reset token is included as a query parameter in the corresponding URL:
+    
+    `https://normal-website.com/reset?token=0a1b2c3d4e5f6g7h8i9j`
+1. When the user visits this URL, the website checks whether the provided token is valid and uses it to determine which account is being reset. If everything is as expected, the user is given the option to enter a new password. Finally, the token is destroyed.
+
+Even if you can't control the password reset link, you can sometimes use the Host Header to inject HTML into sensitive emails. Note that email clients typically don't execute JS, but other HTML techniques like `dangling markup attacks` may still apply.

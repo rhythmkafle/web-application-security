@@ -1,0 +1,5 @@
+## Lab: Basic Password reset poisoning
+We have the creds `wiener:peter` given. 
+On the login page, click on `Forgot Password`, then we get the prompt to give either the username or the email. Let's use the username `wiener`. When we do this, we see that (in our exploit server), in the `Email client`, a password reset link is being sent. 
+Go to the Burp proxy and find the forgot-password POST request, then send it to repeater. If we change our Host header to randomrandom, we will see in our email client that the request is containing URL called `http://randomrandom.com/....`. So now, let's use the exploit server address instead, and change the username to `carlos`. After this, we send the request and see that we get the token password in the `Access Logs`. 
+Paste the access token for carlos and change his password.

@@ -35,8 +35,7 @@
               "title": "1 - HTTP Host Header Attack"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -93,7 +92,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "6d7d157629d42847",
@@ -198,10 +198,10 @@
       "bases:Create new base": false
     }
   },
-  "active": "34b877dfb2ad62a1",
+  "active": "cddd009564767f5f",
   "lastOpenFiles": [
-    "HTTP Host Header Attack/0 - Labs.md",
     "HTTP Host Header Attack/1 - HTTP Host Header Attack.md",
+    "HTTP Host Header Attack/0 - Labs.md",
     "Authentication/0 - Labs.md",
     "Authentication/1 - Authentication.md",
     "HTTP Host Header Attack",
