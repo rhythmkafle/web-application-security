@@ -44,3 +44,14 @@ Burp suite automatically adjusts techniques to suit the HTTP version supported b
 
 The single packet attack enables to completely neutralize interference from network jitter by using a single TCP packet to complete 20-30 requests simultaneously:
 ![[Pasted image 20260303171007.png]]
+## Detecting and exploiting limit overrun race conditions with Turbo Intruder
+We can download Turbo Intruder from the BApp store.
+Turbo Intruder requires some proficiency in Python, but it is suited to more complex attacks, such as the ones that require multiple retries, staggered request timing, or an extremely large number of requests.
+
+To use the single-packet attack in Turbo Intruder:
+1. Ensure that the target supports HTTP/2. The single-packet attack is incompatible with HTTP/1.
+2. Set the `engine=Engine.BURP2` and `ConcurrentConnections=1`
+3. When queueing your requests, group them by assigning them to a named gate using the `gate` argument for the `engine.queue()` method. 
+4. To send all the requests in a given group, open the respective gate with the `engine.openGate()` method.
+
+`def queueRequests(target, wordlists): engine = RequestEngine(endpoint=target.endpoint, concurrentConnections=1, engine=Engine.BURP2 ) # queue 20 requests in gate '1' for i in range(20): engine.queue(target.req, gate='1') # send all requests in gate '1' in parallel engine.openGate('1')`
