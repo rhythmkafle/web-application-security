@@ -8,31 +8,17 @@
         "type": "tabs",
         "children": [
           {
-            "id": "cddd009564767f5f",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "HTTP Host Header Attack/0 - Labs.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "0 - Labs"
-            }
-          },
-          {
             "id": "34b877dfb2ad62a1",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "HTTP Host Header Attack/1 - HTTP Host Header Attack.md",
+                "file": "Race Conditions/0 - Labs.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "1 - HTTP Host Header Attack"
+              "title": "0 - Labs"
             }
           }
         ]
@@ -92,8 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "6d7d157629d42847",
@@ -198,10 +183,20 @@
       "bases:Create new base": false
     }
   },
-  "active": "cddd009564767f5f",
+  "active": "34b877dfb2ad62a1",
   "lastOpenFiles": [
-    "HTTP Host Header Attack/1 - HTTP Host Header Attack.md",
+    "Pasted image 20260303173652.png",
+    "Race Conditions/1 - Race Conditions.md",
+    "Pasted image 20260303171007.png",
+    "Pasted image 20260303165653.png",
+    "Pasted image 20260303160341.png",
+    "Pasted image 20260303160304.png",
+    "Pasted image 20260303143115.png",
+    "Race Conditions/0 - Labs.md",
+    "Untitled.md",
+    "Race Conditions",
     "HTTP Host Header Attack/0 - Labs.md",
+    "HTTP Host Header Attack/1 - HTTP Host Header Attack.md",
     "Authentication/0 - Labs.md",
     "Authentication/1 - Authentication.md",
     "HTTP Host Header Attack",
@@ -210,8 +205,6 @@
     "Pasted image 20260220151924.png",
     "Pasted image 20260220151815.png",
     "Pasted image 20260220151128.png",
-    "Pasted image 20260220150851.png",
-    "Pasted image 20260220150209.png",
     "SQL Injection/1 - SQL Injection.md",
     "Authentication",
     "SQL Injection/0 - Labs.md",
